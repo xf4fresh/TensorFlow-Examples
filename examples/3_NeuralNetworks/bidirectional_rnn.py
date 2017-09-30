@@ -20,6 +20,7 @@ import numpy as np
 
 # Import MNIST data
 from tensorflow.examples.tutorials.mnist import input_data
+
 mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
 
 '''
@@ -35,10 +36,10 @@ batch_size = 128
 display_step = 200
 
 # Network Parameters
-num_input = 28 # MNIST data input (img shape: 28*28)
-timesteps = 28 # timesteps
-num_hidden = 128 # hidden layer num of features
-num_classes = 10 # MNIST total classes (0-9 digits)
+num_input = 28  # MNIST data input (img shape: 28*28)
+timesteps = 28  # timesteps
+num_hidden = 128  # hidden layer num of features
+num_classes = 10  # MNIST total classes (0-9 digits)
 
 # tf Graph input
 X = tf.placeholder("float", [None, timesteps, num_input])
@@ -47,7 +48,7 @@ Y = tf.placeholder("float", [None, num_classes])
 # Define weights
 weights = {
     # Hidden layer weights => 2*n_hidden because of forward + backward cells
-    'out': tf.Variable(tf.random_normal([2*num_hidden, num_classes]))
+    'out': tf.Variable(tf.random_normal([2 * num_hidden, num_classes]))
 }
 biases = {
     'out': tf.Variable(tf.random_normal([num_classes]))
@@ -55,7 +56,6 @@ biases = {
 
 
 def BiRNN(x, weights, biases):
-
     # Prepare data shape to match `rnn` function requirements
     # Current data input shape: (batch_size, timesteps, n_input)
     # Required shape: 'timesteps' tensors list of shape (batch_size, num_input)
@@ -72,13 +72,14 @@ def BiRNN(x, weights, biases):
     # Get lstm cell output
     try:
         outputs, _, _ = rnn.static_bidirectional_rnn(lstm_fw_cell, lstm_bw_cell, x,
-                                              dtype=tf.float32)
-    except Exception: # Old TensorFlow version only returns outputs not states
+                                                     dtype=tf.float32)
+    except Exception:  # Old TensorFlow version only returns outputs not states
         outputs = rnn.static_bidirectional_rnn(lstm_fw_cell, lstm_bw_cell, x,
-                                        dtype=tf.float32)
+                                               dtype=tf.float32)
 
     # Linear activation, using rnn inner loop last output
     return tf.matmul(outputs[-1], weights['out']) + biases['out']
+
 
 logits = BiRNN(X, weights, biases)
 prediction = tf.nn.softmax(logits)
@@ -98,11 +99,10 @@ init = tf.global_variables_initializer()
 
 # Start training
 with tf.Session() as sess:
-
     # Run the initializer
     sess.run(init)
 
-    for step in range(1, training_steps+1):
+    for step in range(1, training_steps + 1):
         batch_x, batch_y = mnist.train.next_batch(batch_size)
         # Reshape data to get 28 seq of 28 elements
         batch_x = batch_x.reshape((batch_size, timesteps, num_input))
@@ -123,4 +123,4 @@ with tf.Session() as sess:
     test_data = mnist.test.images[:test_len].reshape((-1, timesteps, num_input))
     test_label = mnist.test.labels[:test_len]
     print("Testing Accuracy:", \
-        sess.run(accuracy, feed_dict={X: test_data, Y: test_label}))
+          sess.run(accuracy, feed_dict={X: test_data, Y: test_label}))

@@ -29,6 +29,7 @@ import tensorflow as tf
 
 # Import MNIST data
 from tensorflow.examples.tutorials.mnist import input_data
+
 mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
 
 # Parameters
@@ -37,13 +38,15 @@ num_steps = 30000
 batch_size = 64
 
 # Network Parameters
-image_dim = 784 # MNIST images are 28x28 pixels
+image_dim = 784  # MNIST images are 28x28 pixels
 hidden_dim = 512
 latent_dim = 2
+
 
 # A custom initialization (see Xavier Glorot init)
 def glorot_init(shape):
     return tf.random_normal(shape=shape, stddev=1. / tf.sqrt(shape[0] / 2.))
+
 
 # Variables
 weights = {
@@ -91,6 +94,7 @@ def vae_loss(x_reconstructed, x_true):
     kl_div_loss = -0.5 * tf.reduce_sum(kl_div_loss, 1)
     return tf.reduce_mean(encode_decode_loss + kl_div_loss)
 
+
 loss_op = vae_loss(decoder, input_image)
 optimizer = tf.train.RMSPropOptimizer(learning_rate=learning_rate)
 train_op = optimizer.minimize(loss_op)
@@ -100,11 +104,10 @@ init = tf.global_variables_initializer()
 
 # Start training
 with tf.Session() as sess:
-
     # Run the initializer
     sess.run(init)
 
-    for i in range(1, num_steps+1):
+    for i in range(1, num_steps + 1):
         # Prepare Data
         # Get the next batch of MNIST data (only images are needed, not labels)
         batch_x, _ = mnist.train.next_batch(batch_size)
@@ -135,7 +138,7 @@ with tf.Session() as sess:
             z_mu = np.array([[xi, yi]] * batch_size)
             x_mean = sess.run(decoder, feed_dict={noise_input: z_mu})
             canvas[(n - i - 1) * 28:(n - i) * 28, j * 28:(j + 1) * 28] = \
-            x_mean[0].reshape(28, 28)
+                x_mean[0].reshape(28, 28)
 
     plt.figure(figsize=(8, 10))
     Xi, Yi = np.meshgrid(x_axis, y_axis)

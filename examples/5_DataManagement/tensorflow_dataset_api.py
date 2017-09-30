@@ -13,6 +13,7 @@ import tensorflow as tf
 
 # Import MNIST data (Numpy format)
 from tensorflow.examples.tutorials.mnist import input_data
+
 mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
 
 # Parameters
@@ -22,9 +23,9 @@ batch_size = 128
 display_step = 100
 
 # Network Parameters
-n_input = 784 # MNIST data input (img shape: 28*28)
-n_classes = 10 # MNIST total classes (0-9 digits)
-dropout = 0.75 # Dropout, probability to keep units
+n_input = 784  # MNIST data input (img shape: 28*28)
+n_classes = 10  # MNIST total classes (0-9 digits)
+dropout = 0.75  # Dropout, probability to keep units
 
 sess = tf.Session()
 

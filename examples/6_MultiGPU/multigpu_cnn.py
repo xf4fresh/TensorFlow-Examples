@@ -20,6 +20,7 @@ import time
 
 # Import MNIST data
 from tensorflow.examples.tutorials.mnist import input_data
+
 mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
 
 # Training Parameters
@@ -30,9 +31,9 @@ batch_size = 1024
 display_step = 10
 
 # Network Parameters
-num_input = 784 # MNIST data input (img shape: 28*28)
-num_classes = 10 # MNIST total classes (0-9 digits)
-dropout = 0.75 # Dropout, probability to keep units
+num_input = 784  # MNIST data input (img shape: 28*28)
+num_classes = 10  # MNIST total classes (0-9 digits)
+dropout = 0.75  # Dropout, probability to keep units
 
 
 # Build a convolutional neural network
@@ -118,8 +119,8 @@ with tf.device('/cpu:0'):
         with tf.device('/gpu:%d' % i):
 
             # Split data between GPUs
-            _x = X[i * batch_size: (i+1) * batch_size]
-            _y = Y[i * batch_size: (i+1) * batch_size]
+            _x = X[i * batch_size: (i + 1) * batch_size]
+            _y = Y[i * batch_size: (i + 1) * batch_size]
 
             # Because Dropout have different behavior at training and prediction time, we
             # need to create 2 distinct computation graphs that share the same weights.
@@ -172,11 +173,12 @@ with tf.device('/cpu:0'):
                                                                      Y: batch_y})
                 print("Step " + str(step) + ": Minibatch Loss= " + \
                       "{:.4f}".format(loss) + ", Training Accuracy= " + \
-                      "{:.3f}".format(acc) + ", %i Examples/sec" % int(len(batch_x)/te))
+                      "{:.3f}".format(acc) + ", %i Examples/sec" % int(len(batch_x) / te))
             step += 1
         print("Optimization Finished!")
 
         # Calculate accuracy for MNIST test images
         print("Testing Accuracy:", \
-            np.mean([sess.run(accuracy, feed_dict={X: mnist.test.images[i:i+batch_size],
-            Y: mnist.test.labels[i:i+batch_size]}) for i in range(0, len(mnist.test.images), batch_size)]))
+              np.mean([sess.run(accuracy, feed_dict={X: mnist.test.images[i:i + batch_size],
+                                                     Y: mnist.test.labels[i:i + batch_size]}) for i in
+                       range(0, len(mnist.test.images), batch_size)]))

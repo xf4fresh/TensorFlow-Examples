@@ -23,6 +23,7 @@ import tensorflow as tf
 
 # Import MNIST data
 from tensorflow.examples.tutorials.mnist import input_data
+
 mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
 
 # Training Params
@@ -30,10 +31,10 @@ num_steps = 20000
 batch_size = 32
 
 # Network Params
-image_dim = 784 # 28*28 pixels * 1 channel
+image_dim = 784  # 28*28 pixels * 1 channel
 gen_hidden_dim = 256
 disc_hidden_dim = 256
-noise_dim = 200 # Noise data points
+noise_dim = 200  # Noise data points
 
 
 # Generator Network
@@ -73,6 +74,7 @@ def discriminator(x, reuse=False):
         # Output 2 classes: Real and Fake images
         x = tf.layers.dense(x, 2)
     return x
+
 
 # Build Networks
 # Network Inputs
@@ -121,11 +123,10 @@ init = tf.global_variables_initializer()
 
 # Start training
 with tf.Session() as sess:
-
     # Run the initializer
     sess.run(init)
 
-    for i in range(1, num_steps+1):
+    for i in range(1, num_steps + 1):
 
         # Prepare Input Data
         # Get the next batch of MNIST data (only images are needed, not labels)

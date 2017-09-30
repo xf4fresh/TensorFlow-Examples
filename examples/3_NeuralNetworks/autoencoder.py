@@ -22,6 +22,7 @@ import matplotlib.pyplot as plt
 
 # Import MNIST data
 from tensorflow.examples.tutorials.mnist import input_data
+
 mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
 
 # Training Parameters
@@ -33,9 +34,9 @@ display_step = 1000
 examples_to_show = 10
 
 # Network Parameters
-num_hidden_1 = 256 # 1st layer num features
-num_hidden_2 = 128 # 2nd layer num features (the latent dim)
-num_input = 784 # MNIST data input (img shape: 28*28)
+num_hidden_1 = 256  # 1st layer num features
+num_hidden_2 = 128  # 2nd layer num features (the latent dim)
+num_input = 784  # MNIST data input (img shape: 28*28)
 
 # tf Graph input (only pictures)
 X = tf.placeholder("float", [None, num_input])
@@ -52,6 +53,7 @@ biases = {
     'decoder_b1': tf.Variable(tf.random_normal([num_hidden_1])),
     'decoder_b2': tf.Variable(tf.random_normal([num_input])),
 }
+
 
 # Building the encoder
 def encoder(x):
@@ -74,6 +76,7 @@ def decoder(x):
                                    biases['decoder_b2']))
     return layer_2
 
+
 # Construct model
 encoder_op = encoder(X)
 decoder_op = decoder(encoder_op)
@@ -93,12 +96,11 @@ init = tf.global_variables_initializer()
 # Start Training
 # Start a new TF session
 with tf.Session() as sess:
-
     # Run the initializer
     sess.run(init)
 
     # Training
-    for i in range(1, num_steps+1):
+    for i in range(1, num_steps + 1):
         # Prepare Data
         # Get the next batch of MNIST data (only images are needed, not labels)
         batch_x, _ = mnist.train.next_batch(batch_size)

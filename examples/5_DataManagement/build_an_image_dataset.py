@@ -40,14 +40,14 @@ import tensorflow as tf
 import os
 
 # Dataset Parameters - CHANGE HERE
-MODE = 'folder' # or 'file', if you choose a plain text file (see above).
-DATASET_PATH = '/path/to/dataset/' # the dataset file or root folder path.
+MODE = 'folder'  # or 'file', if you choose a plain text file (see above).
+DATASET_PATH = '/path/to/dataset/'  # the dataset file or root folder path.
 
 # Image Parameters
-N_CLASSES = 2 # CHANGE HERE, total number of classes
-IMG_HEIGHT = 64 # CHANGE HERE, the image height to be resized to
-IMG_WIDTH = 64 # CHANGE HERE, the image width to be resized to
-CHANNELS = 3 # The 3 color channels, change to 1 if grayscale
+N_CLASSES = 2  # CHANGE HERE, total number of classes
+IMG_HEIGHT = 64  # CHANGE HERE, the image height to be resized to
+IMG_WIDTH = 64  # CHANGE HERE, the image width to be resized to
+CHANNELS = 3  # The 3 color channels, change to 1 if grayscale
 
 
 # Reading the dataset
@@ -100,7 +100,7 @@ def read_images(dataset_path, mode, batch_size):
     image = tf.image.resize_images(image, [IMG_HEIGHT, IMG_WIDTH])
 
     # Normalize
-    image = image * 1.0/127.5 - 1.0
+    image = image * 1.0 / 127.5 - 1.0
 
     # Create batches
     X, Y = tf.train.batch([image, label], batch_size=batch_size,
@@ -108,6 +108,7 @@ def read_images(dataset_path, mode, batch_size):
                           num_threads=4)
 
     return X, Y
+
 
 # -----------------------------------------------
 # THIS IS A CLASSIC CNN (see examples, section 3)
@@ -121,7 +122,7 @@ batch_size = 128
 display_step = 100
 
 # Network Parameters
-dropout = 0.75 # Dropout, probability to keep units
+dropout = 0.75  # Dropout, probability to keep units
 
 # Build the data input
 X, Y = read_images(DATASET_PATH, MODE, batch_size)
@@ -131,7 +132,6 @@ X, Y = read_images(DATASET_PATH, MODE, batch_size)
 def conv_net(x, n_classes, dropout, reuse, is_training):
     # Define a scope for reusing the variables
     with tf.variable_scope('ConvNet', reuse=reuse):
-
         # Convolution Layer with 32 filters and a kernel size of 5
         conv1 = tf.layers.conv2d(x, 32, 5, activation=tf.nn.relu)
         # Max Pooling (down-sampling) with strides of 2 and kernel size of 2
@@ -185,7 +185,6 @@ saver = tf.train.Saver()
 
 # Start training
 with tf.Session() as sess:
-
     # Run the initializer
     sess.run(init)
 
@@ -193,7 +192,7 @@ with tf.Session() as sess:
     tf.train.start_queue_runners()
 
     # Training cycle
-    for step in range(1, num_steps+1):
+    for step in range(1, num_steps + 1):
 
         if step % display_step == 0:
             # Run optimization and calculate batch loss and accuracy
